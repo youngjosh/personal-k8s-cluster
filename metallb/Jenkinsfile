@@ -10,11 +10,11 @@ pipeline {
       steps {
 
         //Add helm chart
-        helm repo add bitnami https://charts.bitnami.com/bitnami
-        helm repo update
+        sh("helm repo add bitnami https://charts.bitnami.com/bitnami")
+        sh("helm repo update")
 
         //Run helm upgrade
-        helm upgrade metallb bitnami/metallb --namespace kube-system --install --version ${METALLB_VERSION} -f ./metallb/helm/values.yaml
+        sh("helm upgrade metallb bitnami/metallb --kubeconfig $KUBE_CONFIG --namespace kube-system --install --version $METALLB_VERSION -f ./metallb/helm/values.yaml")
       }
     }
   }
