@@ -1,7 +1,7 @@
 pipeline {
   agent any
   environment {
-    METALLB_VERSION = 0.1.21
+    METALLB_VERSION = "0.1.21"
     KUBE_CONFIG = credentials('PI-K3S-CONFIG')
   }
 
