@@ -1,0 +1,21 @@
+pipeline {
+  agent any
+  environment {
+    NGINX_CHART_VERSION = "2.11.2"
+    KUBE_CONFIG = credentials('PI-K3S-CONFIG')
+  }
+
+  stages {
+    stage('Deploy') {
+      steps {
+
+        //Add helm chart
+        sh("helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx")
+        sh("helm repo update")
+
+        //Run helm upgrade
+        sh("helm upgrade ingress-nginx ingress-nginx/ingress-nginx --kubeconfig $KUBE_CONFIG --namespace ingress-nginx --install --version $NGINX_CHART_VERSION -f ./nginx/helm/values.yaml")
+      }
+    }
+  }
+}
