@@ -14,7 +14,7 @@ pipeline {
         sh("helm repo update")
 
         //Run helm upgrade
-        sh("helm upgrade ingress-nginx ingress-nginx/ingress-nginx --kubeconfig $KUBE_CONFIG --namespace ingress-nginx --install --version $NGINX_CHART_VERSION -f ./nginx/helm/values.yaml")
+        sh("helm upgrade ingress-nginx ingress-nginx/ingress-nginx --kubeconfig $KUBE_CONFIG --namespace kube-system --install --version $NGINX_CHART_VERSION -f ./nginx/helm/values.yaml")
       }
     }
   }
