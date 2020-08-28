@@ -1,0 +1,21 @@
+pipeline {
+  agent any
+  environment {
+    METALLB_VERSION = 0.1.21
+    KUBE_CONFIG = credentials('PI-K3S-CONFIG')
+  }
+
+  stages {
+    stage('Deploy') {
+      steps {
+
+        //Add helm chart
+        helm repo add bitnami https://charts.bitnami.com/bitnami
+        helm repo update
+
+        //Run helm upgrade
+        helm upgrade metallb bitnami/metallb --namespace kube-system --install --version ${METALLB_VERSION} -f ./metallb/helm/values.yaml
+      }
+    }
+  }
+}

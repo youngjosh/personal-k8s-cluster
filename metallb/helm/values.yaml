@@ -1,0 +1,20 @@
+#Bitnami build is not for AARCH64 architecture so use official metallb instead
+controller:
+  image:
+    repository: metallb/controller
+    tag: v0.9.3
+
+#Bitnami build is not for AARCH64 architecture so use official metallb instead
+speaker:
+  image:
+    repository: metallb/speaker
+    tag: v0.9.3
+
+configInline:
+  address-pools:
+    - name: default
+
+      protocol: layer2
+
+      addresses:
+        - 192.168.1.240-192.168.1.250
