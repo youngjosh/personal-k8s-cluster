@@ -1,0 +1,16 @@
+pipeline {
+  agent any
+  environment {
+    KUBE_CONFIG = credentials('PI-K3S-CONFIG')
+  } 
+
+  stages {
+    stage('Apply config') {
+      steps {
+        
+        sh("kubectl apply -f ./kubernetes/kube-config")
+
+      }
+    }
+  }
+}
