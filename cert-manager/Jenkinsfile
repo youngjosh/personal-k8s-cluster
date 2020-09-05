@@ -1,0 +1,22 @@
+pipeline {
+  agent any
+  environment {
+    CERT_VERSION = "v1.0.1"
+    KUBE_CONFIG = credentials('PI-K3S-CONFIG')
+  }
+
+  stages {
+    stage('Deploy') {
+      steps {
+        //Create CustomResourceDefinition resources
+        sh("kubectl apply --validate=false -f https://github.com/jetstack/cert-manager/releases/download/v1.0.1/cert-manager.crds.yaml")
+
+        //Add helm chart
+        sh("helm repo add jetstack https://charts.jetstack.io")
+
+        //Run helm upgrade
+        sh("helm upgrade cert-manager jetstack/cert-manager --kubeconfig $KUBE_CONFIG --namespace kube-system --install --version $CERT_VERSION -f ./cert-manager/helm/values.yaml")
+      }
+    }
+  }
+}
