@@ -8,7 +8,7 @@ pipeline {
     stage('Apply config') {
       steps {
         
-        sh("kubectl apply -f ./kubernetes/kube-config")
+        sh("kubectl apply -f ./kubernetes/kube-config --kubeconfig $KUBE_CONFIG")
 
       }
     }
