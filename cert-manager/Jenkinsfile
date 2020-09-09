@@ -16,6 +16,8 @@ pipeline {
 
         //Run helm upgrade
         sh("helm upgrade cert-manager jetstack/cert-manager --kubeconfig $KUBE_CONFIG --namespace kube-system --install --version $CERT_VERSION -f ./cert-manager/helm/values.yaml")
+
+        sh("kubectl apply -f ./kubernetes/cert-issuer.yaml")
       }
     }
   }
