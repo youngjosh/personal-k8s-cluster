@@ -1,0 +1,22 @@
+pipeline {
+  agent any
+  environment {
+    PIHOLE_CHART_VERSION = "1.7.15"
+    KUBE_CONFIG = credentials('PI-K3S-CONFIG')
+    //PIHOLE_PASSWORD = credentials('PIHOLE_PASSWORD')
+  }
+
+  stages {
+    stage('Deploy') {
+      steps {
+
+        //Add helm chart
+        sh("helm repo add mojo2600 https://mojo2600.github.io/pihole-kubernetes/")
+        sh("helm repo update")
+
+        //Run helm upgrade
+        sh("helm upgrade pihole mojo2600/pihole --kubeconfig $KUBE_CONFIG --namespace pihole --install --version $PIHOLE_CHART_VERSION -f ./pihole/helm/values.yaml")
+      }
+    }
+  }
+}
