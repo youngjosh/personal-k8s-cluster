@@ -1,0 +1,21 @@
+pipeline {
+  agent any
+  environment {
+    CERT_VERSION = "2.14.0"
+    KUBE_CONFIG = credentials('PI-K3S-CONFIG')
+  }
+
+  stages {
+    stage('Deploy') {
+      steps {
+
+        //Add helm chart
+        sh("helm repo add jenkinsci https://charts.jenkins.io")
+
+        //Run helm upgrade
+        sh("helm upgrade jenkins jenkinsci/jenkins --kubeconfig $KUBE_CONFIG --namespace jenkins --install --version $CERT_VERSION -f ./jenkins/helm/values.yaml")
+
+      }
+    }
+  }
+}

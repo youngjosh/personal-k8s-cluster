@@ -1,0 +1,16 @@
+#Pulling ARM image
+master:
+  image: jenkins4eval/jenkins
+  tag: "2.259-alpine-arm64"
+  jenkinsUriPrefix: "/jenkins"
+
+  ingress:
+    enabled: true
+    paths:
+      - backend:
+          serviceName: jenkins
+          servicePort: 8080
+    path: "/jenkins"
+    apiVersion: networking.k8s.io/v1beta1
+    annotations:
+      kubernetes.io/ingress.class: "nginx"
