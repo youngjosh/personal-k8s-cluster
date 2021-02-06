@@ -1,3 +1,6 @@
+#Currently defunct
+#Need to build my own jenkins image on ARM64 for slaves then build off them in this dockerfile
+
 FROM jenkinsci/blueocean
 
 USER root
