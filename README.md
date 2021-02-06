@@ -1,8 +1,8 @@
 # personal-k8s-cluster
 
-Once K3S/K8S is deployed to all containers, jenkins pipelines should be run in the following order
+Once K3S/K8S is deployed to all nodes, jenkins pipelines should be run in the following order
 
 - kubernetes
 - metallb: home-k3s-metallb
 - nginx: home-k3s-nginx
-- cert-manager
+- cert-manager: home-k3s-cert
