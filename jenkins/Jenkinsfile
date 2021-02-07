@@ -1,7 +1,7 @@
 pipeline {
   agent any
   environment {
-    CERT_VERSION = "2.14.0"
+    CERT_VERSION = "3.1.8"
     KUBE_CONFIG = credentials('PI-K3S-CONFIG')
   }
 

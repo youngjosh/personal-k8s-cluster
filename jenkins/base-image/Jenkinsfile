@@ -1,0 +1,27 @@
+pipeline {
+  agent any
+  environment {
+    DOCKERHUB_ORGANISATION = "joshuayoung"
+    DOCKERHUB_REPO = "arm64-jenkins-controller-base"
+    DOCKER_USERNAME = "joshuayoung"
+    DOCKER_PASSWORD = credentials('DOCKERHUB_PASSWORD')
+  }
+
+  stages {
+    stage('Build and Push') {
+      steps {
+      
+        //Checkout Jenkins Repo to ./docker (Generated Groovy Script)
+        checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'docker']], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/jenkinsci/docker']]])
+
+        //Login to my container repository
+        sh("echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin")
+
+        //Initialises build and push
+        sh("cd docker")
+        sh("make build-alpine")
+
+      }
+    }
+  }
+}
