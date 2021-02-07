@@ -21,10 +21,10 @@ pipeline {
         sh('echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin')
 
         //Initialises build and push
-        sh("cd docker")
-        sh("ls");
-        sh("make build-alpine")
-
+        dir("docker") {
+          sh("ls");
+          sh("make build-alpine")
+        }
       }
     }
   }
