@@ -1,5 +1,7 @@
 pipeline {
-  agent any
+  agent {
+    docker { image 'node:14-alpine' }
+  }
   environment {
     DOCKERHUB_ORGANISATION = "joshuayoung"
     DOCKERHUB_REPO = "arm64-jenkins-controller-base"
@@ -14,8 +16,12 @@ pipeline {
         //Checkout Jenkins Repo to ./docker (Generated Groovy Script)
         checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'docker']], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/jenkinsci/docker']]])
 
+        //Install docker
+        //sh('./jenkins/base-image/install-docker.sh')
+
+
         //Login to my container repository
-        sh("echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin")
+        sh('echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin')
 
         //Initialises build and push
         sh("cd docker")
