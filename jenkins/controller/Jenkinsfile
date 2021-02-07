@@ -22,6 +22,7 @@ pipeline {
 
         //Initialises build and push
         sh("cd docker")
+        sh("ls");
         sh("make build-alpine")
 
       }
