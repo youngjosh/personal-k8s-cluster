@@ -20,7 +20,7 @@ pipeline {
         //Login to my container repository
         sh('echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin')
 
-        sh('sudo service docker start')
+        sh('service docker start')
 
         //Initialises build and push
         dir("docker") {
