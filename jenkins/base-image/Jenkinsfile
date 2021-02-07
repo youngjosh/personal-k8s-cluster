@@ -1,7 +1,5 @@
 pipeline {
-  agent {
-    docker { image 'node:14-alpine' }
-  }
+  agent any
   environment {
     DOCKERHUB_ORGANISATION = "joshuayoung"
     DOCKERHUB_REPO = "arm64-jenkins-controller-base"
@@ -17,7 +15,7 @@ pipeline {
         checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'docker']], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/jenkinsci/docker']]])
 
         //Install docker
-        //sh('./jenkins/base-image/install-docker.sh')
+        sh('./jenkins/base-image/install-docker.sh')
 
 
         //Login to my container repository
