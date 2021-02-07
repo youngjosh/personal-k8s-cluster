@@ -1,7 +1,7 @@
 #Pulling ARM image
 controller:
   image: joshuayoung/arm64-jenkins
-  tag: "base-2.235.4"
+  tag: "2.235.4-extended"
   jenkinsUriPrefix: "/jenkins"
 
   ingress:

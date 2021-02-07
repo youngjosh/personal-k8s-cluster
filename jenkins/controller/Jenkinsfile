@@ -2,7 +2,7 @@ pipeline {
   agent any
   environment {
     DOCKERHUB_ORGANISATION = "joshuayoung"
-    DOCKERHUB_REPO = "arm64-jenkins-controller-base"
+    DOCKERHUB_REPO = "arm64-jenkins"
     DOCKER_USERNAME = "joshuayoung"
     DOCKER_PASSWORD = credentials('DOCKERHUB_PASSWORD')
   }
@@ -16,7 +16,6 @@ pipeline {
 
         //Install docker
         sh('./jenkins/base-image/install-docker.sh')
-
 
         //Login to my container repository
         sh('echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin')
