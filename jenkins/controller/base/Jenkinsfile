@@ -1,0 +1,30 @@
+pipeline {
+  agent any
+  environment {
+    //Controller will be pulled from https://github.com/jenkinsci/docker by tag
+    CONTROLLER_TAG = "2.235.1"
+    DOCKERHUB_ORGANISATION = "joshuayoung"
+    DOCKERHUB_REPO = "arm64-jenkins"
+    DOCKER_USERNAME = "joshuayoung"
+    DOCKER_PASSWORD = credentials('DOCKERHUB_PASSWORD')
+  }
+
+  stages {
+    stage('Build base controller image') {
+      steps {
+      
+        //Checkout Jenkins Repo to ./docker (Generated Groovy Script)
+        checkout([$class: 'GitSCM', branches: [[name: 'refs/tags/${CONTROLLER_TAG}']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'docker']], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/jenkinsci/docker']]])
+
+        //Login to my container repository
+        sh('echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin')
+
+        //Initialises build and push
+        dir("docker/8/debian/buster/hotspot") {
+          sh('docker build -t $DOCKERHUB_ORGANISATION/$DOCKERHUB_REPO:$CONTROLLER_TAG .');
+          sh('docker push $DOCKERHUB_ORGANISATION/$DOCKERHUB_REPO:$CONTROLLER_TAG')
+        }
+      }
+    }
+  }
+}

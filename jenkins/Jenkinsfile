@@ -13,7 +13,7 @@ pipeline {
         sh("helm repo add jenkinsci https://charts.jenkins.io")
 
         //Run helm upgrade
-        sh("helm upgrade jenkins jenkinsci/jenkins --kubeconfig $KUBE_CONFIG --namespace jenkins --install --version $CERT_VERSION -f ./jenkins/helm/values.yaml --wait")
+        sh("helm upgrade jenkins jenkinsci/jenkins --kubeconfig $KUBE_CONFIG --namespace jenkins --install --version $CERT_VERSION -f ./jenkins/helm/values.yaml --wait --timeout 10m")
 
       }
     }

@@ -1,7 +1,7 @@
 #Currently defunct
 #Need to build my own jenkins image on ARM64 for slaves then build off them in this dockerfile
 
-FROM joshuayoung/arm64-jenkins:base-2.235.4
+FROM joshuayoung/arm64-jenkins:base-2.235.1
 
 USER root
 #Install kubectl 1.18.0

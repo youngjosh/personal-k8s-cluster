@@ -1,6 +1,8 @@
 pipeline {
   agent any
   environment {
+    //Controller will be pulled from https://github.com/jenkinsci/docker by tag
+    CONTROLLER_TAG = "2.235.1"
     DOCKERHUB_ORGANISATION = "joshuayoung"
     DOCKERHUB_REPO = "arm64-jenkins"
     DOCKER_USERNAME = "joshuayoung"
@@ -8,23 +10,15 @@ pipeline {
   }
 
   stages {
-    stage('Build and Push') {
+    stage('Build extended controller image') {
       steps {
-      
-        //Checkout Jenkins Repo to ./docker (Generated Groovy Script)
-        checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'docker']], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/jenkinsci/docker']]])
-
-        //Install docker
-        //sh('./jenkins/controller/install-docker.sh')
 
         //Login to my container repository
         sh('echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin')
 
-        //Initialises build and push
-        dir("docker") {
-          sh('docker ps');
-          sh("make build-alpine")
-        }
+        //Build and push -extended image from local dockerfile
+        sh('docker build -t $DOCKERHUB_ORGANISATION/$DOCKERHUB_REPO:$CONTROLLER_TAG-extended .');
+        sh('docker push $DOCKERHUB_ORGANISATION/$DOCKERHUB_REPO:$CONTROLLER_TAG-extended')
       }
     }
   }
