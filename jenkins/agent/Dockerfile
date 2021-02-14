@@ -51,7 +51,7 @@ RUN curl -LO "https://storage.googleapis.com/kubernetes-release/release/v${KUBEC
   mv ./kubectl /usr/local/bin/kubectl
 
 #Install helm 3
-RUN curl -sSL -o helm-v${HELM_VERSION}-linux-amd64.tar.gz https://get.helm.sh/helm-v${HELM_VERSION}-linux-arm64.tar.gz && \
+RUN curl -sSL -o helm-v${HELM_VERSION}-linux-arm64.tar.gz https://get.helm.sh/helm-v${HELM_VERSION}-linux-arm64.tar.gz && \
   tar -zxvf helm-v${HELM_VERSION}-linux-arm64.tar.gz && \
   mv linux-arm64/helm /usr/local/bin/helm
 
