@@ -1,12 +1,16 @@
 pipeline {
   agent any
   environment {
-    //Controller will be pulled from https://github.com/jenkinsci/docker by tag
+    // Controller repo will be pulled from https://github.com/jenkinsci/docker by tag
     CONTROLLER_TAG = "2.235.1"
+    // Actual jenkins version to be built
+    JENKINS_VERSION = "2.263.4"
+
     DOCKERHUB_ORGANISATION = "joshuayoung"
     DOCKERHUB_REPO = "arm64-jenkins"
     DOCKER_USERNAME = "joshuayoung"
     DOCKER_PASSWORD = credentials('DOCKERHUB_PASSWORD')
+
   }
 
   stages {
@@ -21,8 +25,8 @@ pipeline {
 
         //Initialises build and push
         dir("docker/8/debian/buster/hotspot") {
-          sh('docker build -t $DOCKERHUB_ORGANISATION/$DOCKERHUB_REPO:$CONTROLLER_TAG .');
-          sh('docker push $DOCKERHUB_ORGANISATION/$DOCKERHUB_REPO:$CONTROLLER_TAG')
+          sh('docker build -t $DOCKERHUB_ORGANISATION/$DOCKERHUB_REPO:$JENKINS_VERSION --build-arg JENKINS_VERSION .');
+          sh('docker push $DOCKERHUB_ORGANISATION/$DOCKERHUB_REPO:$JENKINS_VERSION')
         }
       }
     }

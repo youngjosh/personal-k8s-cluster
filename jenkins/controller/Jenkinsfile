@@ -2,7 +2,7 @@ pipeline {
   agent any
   environment {
     //Controller will be pulled from https://github.com/jenkinsci/docker by tag
-    CONTROLLER_TAG = "2.235.1"
+    CONTROLLER_TAG = "2.263.4"
     DOCKERHUB_ORGANISATION = "joshuayoung"
     DOCKERHUB_REPO = "arm64-jenkins"
     DOCKER_USERNAME = "joshuayoung"

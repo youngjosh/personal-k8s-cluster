@@ -1,5 +1,9 @@
 FROM adoptopenjdk/openjdk8:jdk8u282-b08-debian
 
+# Below is from default jenkins agent dockerfile
+
+ARG KUBECTL_VERSION=1.19.4
+ARG HELM_VERSION=3.5.2
 ARG VERSION=4.6
 ARG user=jenkins
 ARG group=jenkins
@@ -25,3 +29,24 @@ RUN mkdir /home/${user}/.jenkins && mkdir -p ${AGENT_WORKDIR}
 VOLUME /home/${user}/.jenkins
 VOLUME ${AGENT_WORKDIR}
 WORKDIR /home/${user}
+
+# Additions
+USER root
+
+# Install Docker
+RUN apt-get update -qq \
+  && apt-get install docker-ce -y
+RUN usermod -aG docker jenkins
+RUN apt-get clean
+
+#Install kubectl
+RUN curl -LO "https://storage.googleapis.com/kubernetes-release/release/v${KUBECTL_VERSION}}/bin/linux/amd64/kubectl" && \
+  chmod +x ./kubectl && \
+  mv ./kubectl /usr/local/bin/kubectl
+
+#Install helm 3
+RUN curl -sSL -o helm-v${HELM_VERSION}-linux-amd64.tar.gz https://get.helm.sh/helm-v${HELM_VERSION}-linux-arm64.tar.gz && \
+  tar -zxvf helm-v${HELM_VERSION}-linux-arm64.tar.gz && \
+  mv linux-arm64/helm /usr/local/bin/helm
+
+USER jenkins

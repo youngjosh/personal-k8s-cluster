@@ -1,21 +1,20 @@
 #Currently defunct
 #Need to build my own jenkins image on ARM64 for slaves then build off them in this dockerfile
 
-FROM joshuayoung/arm64-jenkins:base-2.235.1
+FROM joshuayoung/arm64-jenkins:base-2.263.4
+
+#Disable setup mode
+ENV JAVA_OPTS -Djenkins.install.runSetupWizard=false
 
 USER root
-#Install kubectl 1.18.0
-RUN curl -LO "https://storage.googleapis.com/kubernetes-release/release/v1.18.0/bin/linux/amd64/kubectl" && \
-  chmod +x ./kubectl && \
-  mv ./kubectl /usr/local/bin/kubectl
 
-#Install helm 3 version 3.3.0
-RUN curl -sSL -o helm-v3.3.0-linux-amd64.tar.gz https://get.helm.sh/helm-v3.3.0-linux-amd64.tar.gz && \
-  tar -zxvf helm-v3.3.0-linux-amd64.tar.gz && \
-  mv linux-amd64/helm /usr/local/bin/helm
+#Install Jenkins Plugins
+COPY plugins.txt /usr/share/jenkins/ref/plugins.txt
+RUN /usr/local/bin/install-plugins.sh < /usr/share/jenkins/ref/plugins.txt
 
-#Install docker
-RUN sh ./install-docker.sh
+#JCasC
+COPY jenkins-casc.yaml /usr/local/jenkins-casc.yaml
+ENV CASC_JENKINS_CONFIG /usr/local/jenkins-casc.yaml
 
 #Return user
-#USER jenkins
+USER jenkins
