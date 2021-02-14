@@ -32,12 +32,11 @@ WORKDIR /home/${user}
 
 # Additions
 USER root
-RUN sudo -s
 
 # Install Docker
 RUN apt-get update -qq \
   && apt-get install apt-transport-https ca-certificates curl gnupg-agent software-properties-common -y && \
-  curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
+  curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -
 RUN add-apt-repository \
   "deb [arch=arm64] https://download.docker.com/linux/debian \
   $(lsb_release -cs) \
