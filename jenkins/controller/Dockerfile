@@ -10,7 +10,7 @@ USER root
 
 #Install Jenkins Plugins
 COPY plugins.txt /usr/share/jenkins/ref/plugins.txt
-RUN java -jar jenkins-cli.jar -s /usr/share/jenkins/ref/plugins.txt -restart
+RUN java -jar /usr/lib/jenkins-plugin-manager.jar -s /usr/share/jenkins/ref/plugins.txt -restart
 
 #JCasC
 COPY jenkins-casc.yaml /usr/local/jenkins-casc.yaml
