@@ -49,9 +49,9 @@ RUN add-apt-repository \
   stable"
 RUN apt-get update && \
   apt-get install docker-ce docker-ce-cli containerd.io -y
-RUN usermod -aG docker ${user}
+RUN groupadd docker && usermod -aG docker ${user}
 
-RUN service docker status && docker ps
+RUN docker run hello-world
 
 #Install kubectl
 RUN curl -LO "https://storage.googleapis.com/kubernetes-release/release/v${KUBECTL_VERSION}/bin/linux/amd64/kubectl" && \
