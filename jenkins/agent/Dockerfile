@@ -1,6 +1,6 @@
 FROM adoptopenjdk/openjdk8:jdk8u282-b08-debian
 
-# Below is from default jenkins agent dockerfile
+# Below is from default jenkins agent dockerfile https://github.com/jenkinsci/docker-agent
 
 ARG KUBECTL_VERSION=1.19.4
 ARG HELM_VERSION=3.5.2
@@ -12,7 +12,7 @@ ARG gid=1000
 
 RUN groupadd -g ${gid} ${group}
 RUN useradd -c "Jenkins user" -d /home/${user} -u ${uid} -g ${gid} -m ${user}
-LABEL Description="This is a base image, which provides the Jenkins agent executable (agent.jar)" Vendor="Jenkins project" Version="${VERSION}"
+LABEL Description="This is a base image, which allows connecting Jenkins agents via JNLP protocols" Vendor="Jenkins project" Version="${VERSION}"
 
 ARG AGENT_WORKDIR=/home/${user}/agent
 
@@ -30,8 +30,14 @@ VOLUME /home/${user}/.jenkins
 VOLUME ${AGENT_WORKDIR}
 WORKDIR /home/${user}
 
-# Additions
+# From docker inbound agent https://github.com/jenkinsci/docker-inbound-agent/
 USER root
+
+COPY jenkins-agent /usr/local/bin/jenkins-agent
+RUN chmod +x /usr/local/bin/jenkins-agent &&\
+    ln -s /usr/local/bin/jenkins-agent /usr/local/bin/jenkins-slave
+
+# My additions
 
 # Install Docker
 RUN apt-get update -qq \
@@ -55,4 +61,6 @@ RUN curl -sSL -o helm-v${HELM_VERSION}-linux-arm64.tar.gz https://get.helm.sh/he
   tar -zxvf helm-v${HELM_VERSION}-linux-arm64.tar.gz && \
   mv linux-arm64/helm /usr/local/bin/helm
 
-USER jenkins
+USER ${user}
+
+ENTRYPOINT ["/usr/local/bin/jenkins-agent"]
