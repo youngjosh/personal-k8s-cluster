@@ -49,7 +49,7 @@ RUN add-apt-repository \
   stable"
 RUN apt-get update && \
   apt-get install docker-ce docker-ce-cli containerd.io -y
-RUN groupadd docker && usermod -aG docker ${user}
+RUN usermod -aG docker ${user}
 
 RUN docker run hello-world
 
