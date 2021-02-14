@@ -32,6 +32,7 @@ WORKDIR /home/${user}
 
 # Additions
 USER root
+RUN sudo -s
 
 # Install Docker
 RUN apt-get update -qq \
