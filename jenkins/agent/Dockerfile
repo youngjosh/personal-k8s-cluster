@@ -46,7 +46,7 @@ RUN apt-get update && \
 RUN usermod -aG docker jenkins
 
 #Install kubectl
-RUN curl -LO "https://storage.googleapis.com/kubernetes-release/release/v${KUBECTL_VERSION}}/bin/linux/amd64/kubectl" && \
+RUN curl -LO "https://storage.googleapis.com/kubernetes-release/release/v${KUBECTL_VERSION}/bin/linux/amd64/kubectl" && \
   chmod +x ./kubectl && \
   mv ./kubectl /usr/local/bin/kubectl
 
