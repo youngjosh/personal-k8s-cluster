@@ -1,7 +1,7 @@
 #Currently defunct
 #Need to build my own jenkins image on ARM64 for slaves then build off them in this dockerfile
 
-FROM joshuayoung/arm64-jenkins:base-2.263.4
+FROM joshuayoung/arm64-jenkins:2.263.4
 
 #Disable setup mode
 ENV JAVA_OPTS -Djenkins.install.runSetupWizard=false

@@ -35,9 +35,15 @@ USER root
 
 # Install Docker
 RUN apt-get update -qq \
-  && apt-get install docker-ce -y
+  && apt-get install apt-transport-https ca-certificates curl gnupg-agent software-properties-common -y && \
+  curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -
+RUN add-apt-repository \
+  "deb [arch=arm64] https://download.docker.com/linux/debian \
+  $(lsb_release -cs) \
+  stable"
+RUN apt-get update && \
+  apt-get install docker-ce docker-ce-cli containerd.io
 RUN usermod -aG docker jenkins
-RUN apt-get clean
 
 #Install kubectl
 RUN curl -LO "https://storage.googleapis.com/kubernetes-release/release/v${KUBECTL_VERSION}}/bin/linux/amd64/kubectl" && \
