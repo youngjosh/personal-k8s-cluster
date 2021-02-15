@@ -1,5 +1,4 @@
-#Currently defunct
-#Need to build my own jenkins image on ARM64 for slaves then build off them in this dockerfile
+#Builds off my base Jenkins arm64 image
 
 FROM joshuayoung/arm64-jenkins:2.263.4
 
