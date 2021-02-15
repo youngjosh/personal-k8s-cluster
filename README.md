@@ -20,4 +20,4 @@ Version is found from kubectl get nodes. Currently v1.20.0+k3s2
 ## Node Restart
 
 If the node is stuck in "NotReady" after power loss
--SSH into node and run k3s agent --token CLUSTER_TOKEN --server SERVER_IP
+-SSH into node and run `k3s agent --token CLUSTER_TOKEN --server SERVER_IP`
