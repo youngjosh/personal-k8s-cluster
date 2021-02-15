@@ -1,0 +1,8 @@
+jenkins:
+  clouds:
+  - kubernetes:
+      serverUrl: "https://192.168.1.22:6443"
+      jenkinsUrl: "https://192.168.1.240/jenkins"
+unclassified:
+  location:
+    url: https://192.168.1.240/jenkins

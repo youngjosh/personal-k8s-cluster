@@ -1,0 +1,25 @@
+pipeline {
+  agent any
+  environment {
+    //Controller will be pulled from https://github.com/jenkinsci/docker by tag
+    CONTROLLER_TAG = "2.263.4"
+    DOCKERHUB_ORGANISATION = "joshuayoung"
+    DOCKERHUB_REPO = "arm64-jenkins-k3s-configured"
+    DOCKER_USERNAME = "joshuayoung"
+    DOCKER_PASSWORD = credentials('DOCKERHUB_PASSWORD')
+  }
+
+  stages {
+    stage('Build extended controller image') {
+      steps {
+
+        //Login to my container repository
+        sh('echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin')
+
+        //Build and push extended image from local dockerfile
+        sh('docker build -t $DOCKERHUB_ORGANISATION/$DOCKERHUB_REPO:$CONTROLLER_TAG .');
+        sh('docker push $DOCKERHUB_ORGANISATION/$DOCKERHUB_REPO:$CONTROLLER_TAG')
+      }
+    }
+  }
+}

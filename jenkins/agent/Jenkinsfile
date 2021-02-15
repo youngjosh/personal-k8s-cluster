@@ -1,0 +1,31 @@
+pipeline {
+  agent any
+  environment {
+    // Agent repo will be pulled from https://github.com/jenkinsci/docker-agent by tag
+    // Actual version of agent to download
+    VERSION = "4.6"
+
+    DOCKERHUB_ORGANISATION = "joshuayoung"
+    DOCKERHUB_REPO = "arm64-jenkins-agent"
+    DOCKER_USERNAME = "joshuayoung"
+    DOCKER_PASSWORD = credentials('DOCKERHUB_PASSWORD')
+
+    //Misc Versions
+    KUBECTL_VERSION = "1.19.4"
+    HELM_VERSION = "3.5.2"
+  }
+
+  stages {
+    stage('Build and Push') {
+      steps {
+      
+        //Login to my container repository
+        sh('echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin')
+
+        //Initialises build and push
+        sh('docker build -t $DOCKERHUB_ORGANISATION/$DOCKERHUB_REPO:$VERSION --build-arg VERSION --build-arg HELM_VERSION --build-arg KUBECTL_VERSION .');
+        sh('docker push $DOCKERHUB_ORGANISATION/$DOCKERHUB_REPO:$VERSION')
+      }
+    }
+  }
+}

@@ -1,8 +1,15 @@
+#Values found at https://github.com/jenkinsci/helm-charts/blob/main/charts/jenkins/values.yaml
 #Pulling ARM image
 controller:
-  image: joshuayoung/arm64-jenkins
-  tag: "base-2.235.4"
+  image: joshuayoung/arm64-jenkins-k3s-configured
+  tag: "2.263.4"
   jenkinsUriPrefix: "/jenkins"
+
+  installPlugins: []
+  initializeOnce: true
+
+  nodeSelector:
+    kubernetes.io/hostname: k3s-master
 
   ingress:
     enabled: true

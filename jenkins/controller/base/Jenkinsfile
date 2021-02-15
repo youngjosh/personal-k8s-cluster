@@ -1,0 +1,35 @@
+pipeline {
+  agent any
+  environment {
+    // Controller repo will be pulled from https://github.com/jenkinsci/docker by tag
+    CONTROLLER_TAG = "2.235.1"
+    // Actual jenkins version to be built
+    JENKINS_VERSION = "2.263.4"
+    JENKINS_SHA = "1d4a7409784236a84478b76f3f2139939c0d7a3b4b2e53b1fcef400c14903ab6"
+
+    DOCKERHUB_ORGANISATION = "joshuayoung"
+    DOCKERHUB_REPO = "arm64-jenkins"
+    DOCKER_USERNAME = "joshuayoung"
+    DOCKER_PASSWORD = credentials('DOCKERHUB_PASSWORD')
+
+  }
+
+  stages {
+    stage('Build base controller image') {
+      steps {
+      
+        //Checkout Jenkins Repo to ./docker (Generated Groovy Script)
+        checkout([$class: 'GitSCM', branches: [[name: 'master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: 'docker']], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/jenkinsci/docker']]])
+
+        //Login to my container repository
+        sh('echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin')
+
+        //Initialises build and push
+        dir("docker") {
+          sh('docker build -t $DOCKERHUB_ORGANISATION/$DOCKERHUB_REPO:$JENKINS_VERSION --build-arg JENKINS_VERSION --build-arg JENKINS_SHA -f ./8/debian/buster/hotspot/Dockerfile .');
+          sh('docker push $DOCKERHUB_ORGANISATION/$DOCKERHUB_REPO:$JENKINS_VERSION')
+        }
+      }
+    }
+  }
+}

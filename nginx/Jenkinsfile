@@ -2,7 +2,7 @@ pipeline {
   agent any
   environment {
     NGINX_CHART_VERSION = "2.11.2"
-    KUBE_CONFIG = credentials('PI-K3S-CONFIG')
+    KUBE_CONFIG = credentials('PERSONAL-K8S-CLUSTER-CONFIG')
   }
 
   stages {

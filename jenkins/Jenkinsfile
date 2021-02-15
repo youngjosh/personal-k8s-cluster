@@ -1,8 +1,8 @@
 pipeline {
   agent any
   environment {
-    CERT_VERSION = "2.14.0"
-    KUBE_CONFIG = credentials('PI-K3S-CONFIG')
+    CERT_VERSION = "3.1.8"
+    KUBE_CONFIG = credentials('PERSONAL-K8S-CLUSTER-CONFIG')
   }
 
   stages {
@@ -13,7 +13,7 @@ pipeline {
         sh("helm repo add jenkinsci https://charts.jenkins.io")
 
         //Run helm upgrade
-        sh("helm upgrade jenkins jenkinsci/jenkins --kubeconfig $KUBE_CONFIG --namespace jenkins --install --version $CERT_VERSION -f ./jenkins/helm/values.yaml --wait")
+        sh("helm upgrade jenkins jenkinsci/jenkins --kubeconfig $KUBE_CONFIG --install --version $CERT_VERSION -f ./jenkins/helm/values.yaml --wait --timeout 10m")
 
       }
     }
