@@ -8,4 +8,7 @@ kind: Namespace
 metadata:
   name: jenkins
 ---
-
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: monitoring
