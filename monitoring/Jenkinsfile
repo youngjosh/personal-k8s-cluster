@@ -1,0 +1,21 @@
+pipeline {
+  agent any
+  environment {
+    MONITORING_CHART_VERSION = "13.13.0"
+    KUBE_CONFIG = credentials('PERSONAL-K8S-CLUSTER-CONFIG')
+  }
+
+  stages {
+    stage('Deploy') {
+      steps {
+
+        //Add helm chart
+        sh("helm repo add prometheus-community https://prometheus-community.github.io/helm-charts")
+        sh("helm repo update")
+
+        //Run helm upgrade
+        sh("helm upgrade kube-prometheus prometheus-community/kube-prometheus-stack --kubeconfig $KUBE_CONFIG --namespace monitoring --install --version $MONITORING_CHART_VERSION -f ./monitoring/helm/values.yaml")
+      }
+    }
+  }
+}
